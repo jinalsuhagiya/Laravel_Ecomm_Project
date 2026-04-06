@@ -8,13 +8,8 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index(){
-           if (auth()->check() && auth()->user()->user_type === 'user') {
-            return view('dashboard');
-            }
-             elseif(auth()->check() && auth()->user()->user_type === 'admin') {
-                return view('admin.dashboard');
-        
-    }
+public function index()
+{
+    return view('dashboard');
 }
 }
