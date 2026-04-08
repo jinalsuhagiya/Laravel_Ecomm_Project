@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace jinal\catalog\Http\Controllers;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Controllers\Controller;
-use App\Jobs\CategoryCreated;
 use Illuminate\Http\Request;
 use App\Models\Category;
 
@@ -18,20 +17,15 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $this->authorize('viewAny', Category::class);
+        // $this->authorize('viewAny', Category::class);
 
         $categories = Category::all();
-
-
-
         return view('admin.category.index', compact('categories'));
     }
 
     public function create()
     {
         $this->authorize('create', Category::class);
-
-
 
         return view('admin.category.create');
     }
@@ -44,9 +38,7 @@ class CategoryController extends Controller
             'name' => 'required'
         ]);
 
-        $category = Category::create($request->only('name'));
-
-        // CategoryCreated::dispatch($category);
+        Category::create($request->only('name'));
 
         return redirect()->route('category.index');
     }

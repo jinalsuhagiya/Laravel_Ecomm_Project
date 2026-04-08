@@ -1,0 +1,26 @@
+{
+    "name": "jinal/catalog",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "jinal suhgaiya",
+            "email": "jinal@suhagiya.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "jinal\\catalog\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                
+                "Jinal\\Catalog\\Providers\\CatalogServiceProvider"
+            ],
+            "aliases": { }
+        }
+    },
+    "minimum-stability": "dev"
+}

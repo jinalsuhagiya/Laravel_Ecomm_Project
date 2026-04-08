@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Admin\CategoryController;
+// use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,7 +25,11 @@ Route::middleware(['auth','admin'])->group(function () {
 
     Route::get('/admin/dashboard', [AdminController::class,'dashboard'])
         ->name('admin.dashboard');
-   Route::resource('category', CategoryController::class);
+//    Route::resource('category', CategoryController::class);
 });
 
 require __DIR__.'/auth.php';
+
+// Route::get('test', function(){
+//     return config('category.jinal');
+// });
