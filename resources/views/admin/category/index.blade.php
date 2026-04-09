@@ -27,12 +27,12 @@
         <td>{{ $cat->name }}</td>
         <td>
 
-        
+
             @can('category.edit')
                 <a href="{{ route('category.edit', $cat->id) }}">Edit</a>
             @endcan
 
-  
+
             @can('category.delete')
                 <form action="{{ route('category.destroy', $cat->id) }}" method="POST" style="display:inline;">
                     @csrf
