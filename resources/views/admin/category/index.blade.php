@@ -1,6 +1,6 @@
 @extends('admin.maindesign')
 
-@section('dashboard') {{-- ✅ section name fix --}}
+@section('dashboard')
 
 <h2>Category List</h2>
 
@@ -8,46 +8,44 @@
     <p style="color:green">{{ session('success') }}</p>
 @endif
 
-@can('category.create')
-    <a href="{{ route('category.create') }}">Add Category</a>
-@endcan
+<a href="{{ route('category.create') }}">+ Add Category</a>
 
 <br><br>
 
-<table border="1" cellpadding="10" cellspacing="0">
+<table border="1" width="100%" cellpadding="10">
     <tr>
         <th>ID</th>
         <th>Name</th>
+        <th>Parent Category</th>
         <th>Action</th>
     </tr>
 
-    @forelse($categories as $cat)
+    @foreach($categories as $cat)
     <tr>
         <td>{{ $cat->id }}</td>
+
         <td>{{ $cat->name }}</td>
+
         <td>
+            {{ $cat->parent->name ?? 'Main Category' }}
+        </td>
 
-        
-            @can('category.edit')
-                <a href="{{ route('category.edit', $cat->id) }}">Edit</a>
-            @endcan
+        <td>
+            <a href="{{ route('category.edit', $cat->id) }}">Edit</a>
 
-  
-            @can('category.delete')
-                <form action="{{ route('category.destroy', $cat->id) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
-                </form>
-            @endcan
+            <form action="{{ route('category.destroy', $cat->id) }}"
+                  method="POST"
+                  style="display:inline;">
+                @csrf
+                @method('DELETE')
 
+                <button onclick="return confirm('Delete?')">
+                    Delete
+                </button>
+            </form>
         </td>
     </tr>
-    @empty
-    <tr>
-        <td colspan="3">No Categories Found</td>
-    </tr>
-    @endforelse
+    @endforeach
 
 </table>
 

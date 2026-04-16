@@ -1,6 +1,7 @@
 @extends('admin.maindesign')
 
-@section('dashboard') {{-- ✅ section name fix --}}
+@section('dashboard')
+
 <h2>Edit Category</h2>
 
 {{-- Error --}}
@@ -16,10 +17,53 @@
     @csrf
     @method('PUT')
 
-    <input type="text" name="name" value="{{ $category->name }}">
+    {{-- Category Name --}}
+    <div>
+        <label>Category Name:</label><br>
+        <input type="text"
+               name="name"
+               value="{{ old('name', $category->name) }}"
+               required>
+    </div>
 
-    <button type="submit">Update</button>
+    <br>
+
+    {{-- Parent Category --}}
+    <div>
+        <label>Parent Category:</label><br>
+
+        <select name="parent_id">
+            <option value="">Main Category</option>
+
+            @foreach($categories as $cat)
+
+                {{-- prevent self parent --}}
+                @if($cat->id != $category->id)
+
+                    <option value="{{ $cat->id }}"
+                        {{ old('parent_id', $category->parent_id) == $cat->id ? 'selected' : '' }}>
+
+                        {{ $cat->name }}
+
+                    </option>
+
+                @endif
+
+            @endforeach
+
+        </select>
+    </div>
+
+    <br>
+
+    <button type="submit"
+            style="padding:6px 12px; background:blue; color:white; border:none;">
+        Update
+    </button>
+
 </form>
+
+<br>
 
 <a href="{{ route('category.index') }}">Back</a>
 
