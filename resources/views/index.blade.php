@@ -29,6 +29,38 @@
     <link href="forntend/css/style.css" rel="stylesheet" />
     <!-- responsive style -->
     <link href="forntend/css/responsive.css" rel="stylesheet" />
+    <style>
+/* 🔽 Dropdown submenu fix */
+.dropdown-submenu {
+    position: relative;
+}
+
+/* 🔽 Child menu position */
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+    display: none;
+}
+
+/* 🔽 Show on hover */
+.dropdown-submenu:hover .dropdown-menu {
+    display: block;
+}
+
+/* 🔽 Optional hover effect */
+.dropdown-menu li a:hover {
+    background-color: #f8f9fa;
+}
+
+/* 🔽 Mobile fix */
+@media (max-width: 991px) {
+    .dropdown-submenu .dropdown-menu {
+        position: static;
+        margin-left: 15px;
+    }
+}
+</style>
 </head>
 
 <body>
@@ -59,28 +91,46 @@
                                 Shop
                             </a>
 
-                            <ul class="dropdown-menu p-2" aria-labelledby="shopDropdown" style="min-width: 220px;">
-                                <!-- All Products -->
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('shop') }}">
-                                        🛒 All Products
-                                    </a>
-                                </li>
+                            <ul class="dropdown-menu">
 
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
+    {{-- All Products --}}
+    <li>
+        <a class="dropdown-item" href="{{ route('shop') }}">
+            All Products
+        </a>
+    </li>
 
-                                <!-- Dynamic Categories -->
-                                @foreach ($categories as $cat)
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('shop.category', $cat->id) }}">
-                                            {{ $cat->name }}
-                                        </a>
-                                    </li>
-                                @endforeach
+    <li><hr></li>
 
-                            </ul>
+    {{-- Categories --}}
+    @foreach($categories as $parent)
+
+        <li class="dropdown-submenu">
+            <a class="dropdown-item"
+               href="{{ route('shop.category', $parent->id) }}">
+                {{ $parent->name }}
+            </a>
+
+            {{-- Child --}}
+            @if($parent->children->count())
+                <ul class="dropdown-menu">
+
+                    @foreach($parent->children as $child)
+                        <li>
+                            <a class="dropdown-item"
+                               href="{{ route('shop.category', $child->id) }}">
+                                {{ $child->name }}
+                            </a>
+                        </li>
+                    @endforeach
+
+                </ul>
+            @endif
+        </li>
+
+    @endforeach
+
+</ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="forntend/why.html">

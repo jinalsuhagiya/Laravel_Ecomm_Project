@@ -8,21 +8,36 @@ use App\Models\Category;
 
 class ShopController extends Controller
 {
-    // All Products
+    // All Products + Categories (for menu)
     public function index()
     {
         $products = Product::with('category')->get();
         return view('shop', compact('products'));
     }
 
-    // Category Wise Products
+    // Category Wise (WITH CHILD PRODUCTS 🔥)
     public function category($id)
     {
-        $category = Category::find($id);
-        $products = Product::with('category')
-            ->where('category_id', $id)
-            ->get();
+        $category = Category::with('children')->findOrFail($id);
 
+        // 🔁 Get all ids (parent + child)
+        $ids = $this->getCategoryIds($category);
+
+        $products = Product::with('category')
+            ->whereIn('category_id', $ids)
+            ->get();
         return view('shop', compact('products', 'category'));
+    }
+
+    // 🔁 Recursive function
+    private function getCategoryIds($category)
+    {
+        $ids = [$category->id];
+
+        foreach ($category->children as $child) {
+            $ids = array_merge($ids, $this->getCategoryIds($child));
+        }
+
+        return $ids;
     }
 }
