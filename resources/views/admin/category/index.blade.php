@@ -2,51 +2,103 @@
 
 @section('dashboard')
 
-<h2>Category List</h2>
+<div class="container mt-4">
 
-@if(session('success'))
-    <p style="color:green">{{ session('success') }}</p>
-@endif
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Category List</h3>
 
-<a href="{{ route('category.create') }}">+ Add Category</a>
+        <a href="{{ route('category.create') }}" class="btn btn-primary">
+            <i class="fa fa-plus"></i> Add Category
+        </a>
+    </div>
 
-<br><br>
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('success') }}
 
-<table border="1" width="100%" cellpadding="10">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Parent Category</th>
-        <th>Action</th>
-    </tr>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
-    @foreach($categories as $cat)
-    <tr>
-        <td>{{ $cat->id }}</td>
+    <div class="card">
 
-        <td>{{ $cat->name }}</td>
+        <div class="card-body">
 
-        <td>
-            {{ $cat->parent->name ?? 'Main Category' }}
-        </td>
+            <div class="table-responsive">
 
-        <td>
-            <a href="{{ route('category.edit', $cat->id) }}">Edit</a>
+                <table class="table table-bordered table-striped table-hover align-middle">
 
-            <form action="{{ route('category.destroy', $cat->id) }}"
-                  method="POST"
-                  style="display:inline;">
-                @csrf
-                @method('DELETE')
+                    <thead class="table-dark">
+                        <tr>
+                            <th width="80">ID</th>
+                            <th>Category Name</th>
+                            <th>Parent Category</th>
+                            <th width="180">Action</th>
+                        </tr>
+                    </thead>
 
-                <button onclick="return confirm('Delete?')">
-                    Delete
-                </button>
-            </form>
-        </td>
-    </tr>
-    @endforeach
+                    <tbody>
 
-</table>
+                        @forelse($categories as $cat)
+
+                            <tr>
+
+                                <td>{{ $cat->id }}</td>
+
+                                <td>{{ $cat->name }}</td>
+
+                                <td>
+                                    {{ $cat->parent->name ?? 'Main Category' }}
+                                </td>
+
+                                <td>
+
+                                    <a href="{{ route('category.edit', $cat->id) }}"
+                                       class="btn btn-warning btn-sm">
+                                        Edit
+                                    </a>
+
+                                    <form action="{{ route('category.destroy', $cat->id) }}"
+                                          method="POST"
+                                          class="d-inline">
+
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="submit"
+                                                class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Are you sure you want to delete this category?')">
+                                            Delete
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+                        @empty
+
+                            <tr>
+                                <td colspan="4" class="text-center text-danger">
+                                    No Categories Found
+                                </td>
+                            </tr>
+
+                        @endforelse
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 @endsection

@@ -2,62 +2,73 @@
 
 @section('dashboard')
 
-<h2>Add Category</h2>
+<div class="container mt-4">
 
-{{-- Error --}}
-@if($errors->any())
-    <div style="color:red">
-        @foreach($errors->all() as $error)
-            <p>{{ $error }}</p>
-        @endforeach
+    <div class="card">
+
+        <div class="card-header">
+            <h3>Add Category</h3>
+        </div>
+
+        <div class="card-body">
+
+            {{-- Validation Errors --}}
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form action="{{ route('category.store') }}" method="POST">
+                @csrf
+
+                {{-- Category Name --}}
+                <div class="mb-3">
+                    <label class="form-label">Category Name</label>
+
+                    <input type="text"
+                           name="name"
+                           class="form-control"
+                           placeholder="Enter Category Name"
+                           value="{{ old('name') }}"
+                           required>
+                </div>
+
+                {{-- Parent Category --}}
+                <div class="mb-3">
+                    <label class="form-label">Parent Category</label>
+
+                    <select name="parent_id" class="form-select">
+                        <option value="">Main Category</option>
+
+                        @foreach($categories as $parent)
+                            <option value="{{ $parent->id }}"
+                                {{ old('parent_id') == $parent->id ? 'selected' : '' }}>
+                                {{ $parent->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Buttons --}}
+                <button type="submit" class="btn btn-success">
+                    Save Category
+                </button>
+
+                <a href="{{ route('category.index') }}" class="btn btn-secondary">
+                    Back
+                </a>
+
+            </form>
+
+        </div>
+
     </div>
-@endif
 
-<form action="{{ route('category.store') }}" method="POST">
-    @csrf
-
-    {{-- Category Name --}}
-    <div>
-        <label>Category Name:</label><br>
-        <input type="text"
-               name="name"
-               value="{{ old('name') }}"
-               placeholder="Enter Category Name"
-               required>
-    </div>
-
-    <br>
-
-    {{-- Parent Category --}}
-    <div>
-        <label>Parent Category:</label><br>
-
-        <select name="parent_id">
-            <option value="">Main Category</option>
-
-            @foreach($categories as $parent)
-
-                {{-- Parent --}}
-                <option value="{{ $parent->id }}"
-                    {{ old('parent_id') == $parent->id ? 'selected' : '' }}>
-                    {{ $parent->name }}
-                </option>
-            @endforeach
-
-        </select>
-    </div>
-
-    <br>
-
-    <button type="submit"
-            style="padding:6px 12px; background:green; color:white; border:none;">
-        Save
-    </button>
-
-</form>
-
-<br>
-
-<a href="{{ route('category.index') }}">Back</a>
+</div>
 
 @endsection

@@ -32,7 +32,7 @@ class ProductController extends Controller
             'price'       => 'required|numeric',
             'quantity'    => 'required|integer',
             'category_id' => 'required',
-            'image'       => 'nullable|image|mimes:jpg,png,jpeg|max:2048'
+            // 'image'       => 'nullable|image|mimes:jpg,png,jpeg|max:2048'
         ]);
 
         $data = $request->all();

@@ -26,13 +26,26 @@ class WelcomeNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
      * Get the mail representation of the notification.
      */
     public function toMail(object $notifiable): MailMessage
+    {
+            return (new MailMessage)
+                    ->subject('Welcome User')
+                    ->greeting('Hello '.$notifiable->name)
+                    ->line('Welcome to our website.')
+                    ->action('Visit Website', url('/'))
+                    ->line('Thank you for joining us!');
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toDatabase(object $notifiable): MailMessage
     {
             return (new MailMessage)
                     ->subject('Welcome User')

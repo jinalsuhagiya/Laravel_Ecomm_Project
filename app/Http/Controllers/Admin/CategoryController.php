@@ -15,10 +15,8 @@ class CategoryController extends Controller
    public function index()
 {
     $this->authorize('viewAny', Category::class);
-    // Fetch categories with pagination (e.g., 10 per page)
-    return $categories = Category::latest()->paginate(10);
-    exit();
 
+     $categories = Category::all();
     return view('admin.category.index', compact('categories'));
 }
 
